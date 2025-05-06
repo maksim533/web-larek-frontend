@@ -115,6 +115,7 @@ type IUserNumberAndEmail = Pick<IUser, 'number' | 'email'>
 Класс отвечает за хранение и обработку данных с сервера  
 
 Поля класса:  
+- items: IItem[] - массив товара;
 - _id: string - id карточки
 - tag: string - тег карточки
 - title: string - название карточки
@@ -124,7 +125,8 @@ type IUserNumberAndEmail = Pick<IUser, 'number' | 'email'>
 
 Методы класса:  
 - setAllItems(Items: IItem[]):void - cохраняет массив карточек;
-- getItem(ItemId: string): IItem - получает карточку по её id
+- getItem(ItemId: string): IItem - получает карточку по её id;
+- getAllItem():IItem[] - получает массив карточек;
 
 
 ### Класс UserData
@@ -143,19 +145,23 @@ type IUserNumberAndEmail = Pick<IUser, 'number' | 'email'>
 валидирует поля адреса и типа оплаты
 - validityNumberAndEmail():boolean - 
 валидирует поля номера и эл. почты пользователя
+- getNumberAndEmail():IUserNumberAndEmail - получает номер и эл.почту от пользователя
+- getAddressAndPayment():IUserAddressAndPayment - получает адрес и тип оплаты от пользователя
 
 ### Класс BasketData 
 Класс отвечает за хранение и обработку данных для корзины от пользователя  
 
 Поля класса:  
-- Items: IItem[];
+- items: IItem[];
 
 Методы класса:  
 - getFullPrice():number - считает и возвращает сумму всех товаров в корзине
-- getCounter(): возвращает количество товаров в корзине
+- getCounter():number возвращает количество товаров в корзине
 - addItem(item: IItem):void - добавляет карточку в корзину
 - deleteItem(itemId: string): void - удаляет товар с корзины
-- deleteAllItem():void - удаляет все карточки с корзины
+- deleteAllItem():void - удаляет все карточки с корзины;
+- getAllItems():IItem[] - метод получает массив всех товаров с корзины;
+- getAllIdItems(items: IItem[]):[] - метод получает id карточек
 
 ## Классы представления
 
@@ -178,22 +184,32 @@ type IUserNumberAndEmail = Pick<IUser, 'number' | 'email'>
 Класс предназначен для отображения товаров на странице
 
 Поля класса:  
-- ItemElement:HTMLElement - темплейт товара
-- ItemTitle:HTMLElement - название товара
-- ItemCategory:HTMLElement - категория товара
-- ItemPrice:HTMLElement - цена товара
-- ItemImage:HTMLImageElement - изображение товара
+- itemElement:HTMLElement - темплейт товара
+- itemTitle:HTMLElement - название товара
+- itemCategory:HTMLElement - категория товара
+- itemPrice:HTMLElement - цена товара
+- itemImage:HTMLImageElement - изображение товара
 
 Методы класса:  
 - setPrice(price: number | null):string - метод переводит цену из числа в строку
 - render(item: IItem):HTMLElement - возвращает карточку
 
-### Класс ItemModal
+### Класс BasketItem
+Класс наследуется от Item, предназначен для отображения товара в корзине  
+
+Поля класса:
+- index:HTMLElement - индекс элемента
+- buttonDelete:HTMLButtonElement - кнопка удаления товара 
+
+Методы класса:
+- render(item: IItem):HTMLElement - возвращает карточку
+
+### Класс ItemPreview
 Класс наследуется от Item, предназначен для отображения полного описания товара  
 
 Поля класса:  
-- ItemDescription:HTMLElement - описание товара
-- ItemButton - кнопка купить
+- itemDescription:HTMLElement - описание товара
+- itemButton - кнопка купить
 
 Методы класса:  
 - render(Item: IItem):HTMLElement - возвращает карточку
@@ -203,69 +219,90 @@ type IUserNumberAndEmail = Pick<IUser, 'number' | 'email'>
 
 Поля класса:  
 
-- basket:HTMLElement - темплейт корзины
+- basket:HTMLElement - контейнер корзины
 - basketList:HTMLElement - список товаров
 - bascetButton:HTMLButtonElement - кнопка оформления
-- price:HTMLElement - общая сумма 
+- price:HTMLElement - общая сумма
+
+Методы класса:  
+- setFullPrice(price: number):string - метод сохраняет и отображает полную сумму товара в корзине
+
+### Класс BascetHeader
+Класс наследуется от Bascet, предназначен для отображения корзины в шапке 
+
+Поля класса:
 - headerBascet:HTMLButtonElement - кнопка корзины
 - headerCount:HTMLElement - количество товара в корзине
 
-Методы класса:  
+Методы класса: 
 - setCount(total: number):number - метод сохраняет значение и отображает количество товара в корзине
-- setFullPrice(price: number):string - метод сохраняет и отображает полную сумму товара в корзине
 
-### Класс BasketItem
-Класс предназначен для отображения товара в корзине  
+
+### Класс Form
+Класс предназначен для отображения форм  
 
 Поля класса:
-- basketItem:HTMLElement - темплейт товара
-- price:HTMLElement - цена товара
-- index:HTMLElement - индекс элемента
-- title:HTMLElement - название товара
-- buttonDelete:HTMLButtonElement - кнопка удаления товара 
-
-Методы класса:  
-- setPrice(price: number | null):string - метод переводит цену товара из числа в строку и отображает её
-- render(item: IItem):HTMLElement - возвращает товар
-
-### Класс FormAddressAndPaymant
-Класс предназначен для отображение формы адреса и типа оплаты  
-
-Поля класса:  
-- form:HTMLFormElement - темплейт форм
-- buttons:HTMLButtonElement[] - кнопки типа оплаты
-- buttonSubmit:HTMLButtonElement - кнопка продолжить 
+- form:HTMLFormElement - форма
+- buttonSubmit:HTMLButtonElement - кнопка продолжить/оплатить
 - formError:HTMLElement - текст ошибки
 
-Методы класса:  
-- IsValid(valid: boolean):void - метод блокирует кнопку при невалидных значения
-- buttonSelected(button: string):void - метод добовляет обводку к выбранной кнопке оплаты
+Методы класса:
+- isValid(valid: boolean):void - метод блокирует кнопку при невалидных значения
 - render():HTMLFormElement - возвращает форму
 
-### Класс FormNumberAndEmail
-Класс предназначен для отображения формы с номером и эл. почтой  
+
+### Класс FormAddressAndPaymant
+Класс наследуется от Form, предназначен для отображение формы адреса и типа оплаты  
 
 Поля класса:  
-- form:HTMLFormElement - форма с номером и эл. почтой
-- buttonSubmit:HTMLButtonElement - кнопка оплатить
-- inputs:HTMLInputElement[] - поля ввода
-- formError:HTMLElement - текст ошибки 
-
+- buttons:HTMLButtonElement[] - кнопки типа оплаты
 
 Методы класса:  
-- IsValid(valid: boolean):void - метод блокирует кнопку при невалидных значения
-- render():HTMLFormElement - возвращает форму
+- buttonSelected(button: string):void - метод добовляет обводку к выбранной кнопке оплаты
+
+
+### Класс FormNumberAndEmail
+Класс наследуется от Form, предназначен для отображения формы с номером и эл. почтой  
+
+Поля класса:  
+- inputs:HTMLInputElement[] - поля ввода
 
 ### Класс Success
 Класс предназначен для вывода модального окна с успешным статусом  
 
 Поля класса:  
 - success:HTMLElement - темплейт модального окна
-- description:HTMLElement - описание о списании 
+- description:HTMLElement - элемент для вывода суммы покупки
 - button:HTMLButtonElement - кнопка закрытия
 
 Методы класса:  
 - render(price:number):HTMLElement - возвращает модальное окно
 
 
-## Роль презентора в данном проекте выполняет EventEmitter
+
+## Cлой комуникации
+
+### Класс AppApi
+Класс наследуется от Api, предназначен для реализации взаимодействия с бекендом сервера
+
+Поля Класса: 
+- cdn:string - содержит url куда отпраляется запрос;
+
+Методы класса:  
+- getAllItem():Promise - получает список товаров
+- getItemId(itemId: string):Promise - получает товар по id
+- postItem(data):Promise - отправляет данные на сервер и возвращает результат 
+
+## Взаимодействие данных и представление осуществляется за счет брокера событий выступающего в роли презентера
+
+Все события:  
+- item:select - Выбор карточки для отображение в модальном окне
+- basket:open - Открытие корзины  
+- addItem:add - Добавление товара в корзину
+- deleteItem:delete - Удаление товара из корзины
+- formAddressAndPayment:validity - Валидация формы адреса и типа оплаты
+- formNumberAndEmail:validity -  Валидация формы номера и телефона
+- formContinue:select - переход на следующий этап оформление заказа
+- formSubmit:submit - подтверждение и отпрака заказа
+- clearBasket:delete - очищение всей корзины
+
