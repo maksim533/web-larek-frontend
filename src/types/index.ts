@@ -1,20 +1,38 @@
+import { IEvents } from "../components/base/events"
+
 export interface IUser {
   address: string
-  number: number
+  phone: string
   payment: string
   email: string
+  
 }
 
+
 export interface IItem {
-  _id: string
-  index?:number
-  tag?: string
+  id: string
+  category: string
   title: string
-  description?: string
-  image?: string
+  description: string
+  image: string
   price: number | null
 }
 
-export type IUserAddressAndPayment = Pick<IUser, 'address' | 'payment'>
+export interface IItemView extends IItem {
+   index?:number
+   itemButton?: boolean
+}
 
-export type IUserNumberAndEmail = Pick<IUser, 'number' | 'email'>
+export interface IOrder extends IUser {
+  total: number;
+  items: string[];
+}
+
+
+export interface IOrderResult {
+  id: string;
+  total: number
+}
+
+export type FormErrors = Partial<Record<keyof IUser, string>>
+

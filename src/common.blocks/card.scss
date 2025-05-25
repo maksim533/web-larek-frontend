@@ -4,6 +4,7 @@
 .card {
   @include mixins.flex(column);
   border: 0;
+  align-items: flex-start;
   border-radius: $defaultBorderRadius;
   background-color: $primary;
   color: white;
@@ -43,6 +44,7 @@
   &__image {
     height: 390px;
     aspect-ratio: 1;
+    align-self: center;
     margin: 3.75rem;
   }
   &__title {
