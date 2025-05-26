@@ -125,15 +125,10 @@ type IUserNumberAndEmail = Pick<IUser, 'number' | 'email'>
 
 - handleResponse(response: Response): Promise<object> - обрабатывает ответ от сервера
 - get(uri: string) - получает ответ от сервера
-- post(uri: string, data: object, method: ApiPostMethods = 'POST') - отправляет запрос на сервер
-### EventEmitter
-
+- post(uri: string, data: object, method: ApiPostMethods = 'POST') - отправляет запрос на сервер### EventEmitter
 Класс EventEmitter который соответствует интерфейсу IEvents, отвечает за обработку событий.
-
 Поля класса:
-
-- \_events: Map<EventName,Set<'Subscriber'>> - отвечает за хранение колекции событий
-
+- _events: Map<EventName,Set<'Subscriber'>> - отвечает за хранение колекции событий
 Метода класса:
 
 - on<T extends object>(eventName: EventName, callback: (event: T) => void) - устанавливает обработчик на событие
