@@ -43,10 +43,9 @@ npm run build
 
 ```
 yarn build
-
 ```
 
-## Деплой  
+## Деплой
 
 <https://maksim533.github.io/web-larek-frontend/>
 
@@ -123,14 +122,17 @@ type IUserNumberAndEmail = Pick<IUser, 'number' | 'email'>
 
 Методы класса:
 
-- handleResponse(response: Response): Promise<object> - обрабатывает ответ от сервера
+- handleResponse(response: Response): Promise<'object'> - обрабатывает ответ от сервера
 - get(uri: string) - получает ответ от сервера
 - post(uri: string, data: object, method: ApiPostMethods = 'POST') - отправляет запрос на сервер
+
 ### EventEmitter
+
 Класс EventEmitter который соответствует интерфейсу IEvents, отвечает за обработку событий.
 Поля класса:
-- _events: Map<EventName,Set<'Subscriber'>> - отвечает за хранение колекции событий
-Метода класса:
+
+- \_events: Map<EventName,Set<'Subscriber'>> - отвечает за хранение колекции событий
+  Метода класса:
 
 - on<T extends object>(eventName: EventName, callback: (event: T) => void) - устанавливает обработчик на событие
 - off(eventName: EventName, callback: Subscriber) - снимает обработчик с события
@@ -138,25 +140,32 @@ type IUserNumberAndEmail = Pick<IUser, 'number' | 'email'>
 - onAll(callback: (event: EmitterEvent) => void) - слушает все события
 - offAll() - сбрасывает все обработчики
 - trigger<T extends object>(eventName: string, context?: Partial<T>) - делает коллбек тригер, генерирующий событие при вызове
+
 ## Классы данных
+
 ### Класс itemData
+
 Класс отвечает за хранение и обработку данных с сервера
 Поля класса:
+
 - items: IItem[] - поле для сохранения массива карточек
 - events: IEvents - поле для сохранения класса events
 - preview: IItem - поле для сохранения одной карточки
-Методы класса:
+  Методы класса:
 - setAllItems(Items: IItem[]):void - cохраняет массив карточек;
 - getItem(ItemId: string): IItem - получает карточку по её id;
 - getAllItem():IItem[] - получает массив карточек;
 - setPreview(item: IItem) - сохраняет одну карточку для показа
+
 ### Класс UserData
+
 Класс отвечает за хранение и обработку данных от пользователя
 Поля класса:
+
 - order: IUser - сохраняет данные пользователя
 - formErrors: FormErrors - поле для ошибок
 - events: IEvents - поле для сохранения класса events
-Методы класса:
+  Методы класса:
 
 - setOrderField(field: keyof IUser, value: string): void - сохраняет данные пользователя
 - validityOrder() - валидирует данные пользователя
