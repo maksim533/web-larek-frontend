@@ -8,7 +8,7 @@ export interface IForm {
 }
 
 export interface IOrderForm {
-	buttonSelected: string;
+	payment: string;
 	address: string;
 }
 
@@ -80,13 +80,13 @@ export class FormOrder extends Form<IOrderForm> {
 				const target = event.target as HTMLButtonElement;
 				const name = target.name as keyof IOrderForm;
 				const field = 'payment' as keyof IOrderForm;
-				this.buttonSelected = name;
 				this.onInputChange(field, name);
+				this.events.emit('payment:change');
 			});
 		});
 	}
 
-	set buttonSelected(name: string) {
+	set payment(name: string) {
 		this._buttons.forEach((button) => {
 			this.toggleClass(button, 'button_alt-active', button.name === name);
 		});

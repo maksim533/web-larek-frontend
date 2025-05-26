@@ -1,7 +1,7 @@
 import { createElement, ensureElement } from '../../utils/utils';
 import { Component } from '../base/Components';
 import { IEvents } from '../base/events';
-import { IAction, Item } from './Item';
+
 
 export interface IBascet {
 	items: HTMLElement[];
@@ -50,29 +50,5 @@ export class Basket extends Component<IBascet> {
 			this.basketButton.disabled = false;
 			this.basketPrice.textContent = `${value} синапсов`;
 		}
-	}
-}
-
-export class BasketItem extends Item {
-	protected _index: HTMLElement;
-	protected buttonDelete: HTMLButtonElement;
-
-	constructor(
-		protected container: HTMLElement,
-		protected events: IEvents,
-		action?: IAction
-	) {
-		super(container, events, action);
-		this._index = ensureElement('.basket__item-index', this.container);
-		this.buttonDelete = ensureElement(
-			'.basket__item-delete',
-			container
-		) as HTMLButtonElement;
-
-		this.buttonDelete.addEventListener('click', action?.onClick);
-	}
-
-	set index(value: string) {
-		this._index.textContent = value;
 	}
 }

@@ -2,13 +2,11 @@ import { FormErrors, IOrder, IUser } from '../../types';
 import { IEvents } from '../base/events';
 
 export class UserData {
-	order: IOrder = {
+	order: IUser = {
 		phone: '',
 		address: '',
 		email: '',
-		payment: '',
-		total: 0,
-		items: [],
+		payment: null,
 	};
 
 	protected formErrors: FormErrors = {};
@@ -17,9 +15,14 @@ export class UserData {
 	constructor(events: IEvents) {
 		this.events = events;
 	}
-	setOrderItemsAndTotal(item: string[], total: number) {
-		this.order.items = item;
-		this.order.total = total;
+
+	clearOrder(){
+		this.order = {
+			address: '',
+			phone: '',
+			payment: null,
+			email: ''
+		}
 	}
 
 	setOrderField(field: keyof IUser, value: string): void {

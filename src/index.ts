@@ -1,15 +1,15 @@
-import { AppApi } from './components/modal/AppApi';
+import { AppApi } from './components/model/AppApi';
 import { API_URL, CDN_URL } from './utils/constants';
 import './scss/styles.scss';
-import { ItemData } from './components/modal/ItemData';
+import { ItemData } from './components/model/ItemData';
 import { EventEmitter } from './components/base/events';
-import { UserData } from './components/modal/UserData';
-import { BasketData } from './components/modal/BasketData';
+import { UserData } from './components/model/UserData';
+import { BasketData } from './components/model/BasketData';
 import { Page } from './components/view/Page';
-import { ItemElement, ItemPreview } from './components/view/Item';
+import { ItemElement, ItemPreview, BasketItem } from './components/view/Item';
 import { cloneTemplate, ensureElement } from './utils/utils';
 import { Modal } from './components/view/Modal';
-import { BasketItem, Basket } from './components/view/Basket';
+import { Basket } from './components/view/Basket';
 import { IItem, IUser } from './types';
 import { FormContacts, FormOrder } from './components/view/Form';
 import { Success } from './components/view/Success';
@@ -37,6 +37,11 @@ const modal = new Modal(ensureElement<HTMLElement>('#modal-container'), events);
 const basket = new Basket(cloneTemplate(basketTemplate), events);
 const formOrder = new FormOrder(cloneTemplate(orderTemplate), events);
 const formContacts = new FormContacts(cloneTemplate(contacts), events);
+const success = new Success(cloneTemplate(successTemplate), {
+	onClick: () => {
+		modal.close();
+	},
+});
 
 events.on('item:setAllItems', () => {
 	page.itemList = itemData.getAllItems().map((item: IItem) => {
@@ -51,7 +56,6 @@ events.on('item:setAllItems', () => {
 			id: item.id,
 		});
 	});
-	page.counter = basketData.getAllItems().length;
 });
 
 events.on('card:select', (item: IItem) => {
@@ -87,38 +91,32 @@ events.on('preview:changed', (item: IItem) => {
 
 events.on('item:add', () => {
 	basketData.addItem(itemData.preview);
-	page.counter = basketData.getAllItems().length;
 	modal.close();
 });
 
 events.on('item:delete', (item: IItem) => {
 	basketData.deleteItem(item.id);
-	page.counter = basketData.getAllItems().length;
 	modal.close();
 });
 
 events.on('basket:open', () => {
 	modal.render({
-		content: basket.render({
-			fullPrice: basketData.getFullPrice(),
-		}),
+		content: basket.render({}),
 	});
 });
 
 events.on('basket:changed', () => {
 	page.counter = basketData.getAllItems().length;
-	let counter = 0;
-	basket.items = basketData.getAllItems().map((item) => {
+	basket.fullPrice = basketData.getFullPrice();
+	basket.items = basketData.getAllItems().map((item, index) => {
 		const itemBasket = new BasketItem(cloneTemplate(cardBasket), events, {
 			onClick: () => {
 				basketData.deleteItem(item.id);
-				basket.fullPrice = basketData.getFullPrice();
 			},
 		});
-		counter = counter + 1;
 		return itemBasket.render({
 			id: item.id,
-			index: counter,
+			index: index + 1,
 			title: item.title,
 			price: item.price,
 		});
@@ -126,15 +124,11 @@ events.on('basket:changed', () => {
 });
 
 events.on('basket:continue', () => {
-	userData.setOrderItemsAndTotal(
-		basketData.getBasketIdItems(),
-		basketData.getFullPrice()
-	);
 	modal.render({
 		content: formOrder.render({
 			isValid: false,
 			errors: [],
-			buttonSelected: null,
+			payment: null,
 			address: '',
 		}),
 	});
@@ -146,6 +140,10 @@ events.on(
 		userData.setOrderField(data.field, data.value);
 	}
 );
+
+events.on('payment:change', () => {
+	formOrder.payment = userData.order.payment;
+});
 
 events.on('formErrors:change', (errors: Partial<IUser>) => {
 	const { payment, address, email, phone } = errors;
@@ -172,22 +170,19 @@ events.on('order:submit', () => {
 
 events.on('contacts:submit', () => {
 	appApi
-		.postItem(userData.order)
+		.postItem({
+			total: basketData.getFullPrice(),
+			items: basketData.getBasketIdItems(),
+			address: userData.order.address,
+			phone: userData.order.phone,
+			payment: userData.order.payment,
+			email: userData.order.email,
+		})
 		.then((res) => {
-			const success = new Success(cloneTemplate(successTemplate), {
-				onClick: () => {
-					modal.close();
-					basketData.deleteAllItem();
-					page.counter = basketData.getAllItems().length;
-					userData.order.address = '';
-					userData.order.email = '';
-					(userData.order.items = []),
-						(userData.order.payment = ''),
-						(userData.order.total = 0),
-						(userData.order.phone = '');
-				},
-			});
-			success.total = res.total;
+			const successPage = success;
+			successPage.total = res.total;
+			basketData.deleteAllItem();
+			userData.clearOrder();
 			modal.render({
 				content: success.render({}),
 			});

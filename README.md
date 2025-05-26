@@ -165,13 +165,12 @@ type IUserNumberAndEmail = Pick<IUser, 'number' | 'email'>
 
 Поля класса:
 
-- order: IOrder - сохраняет данные пользователя
+- order: IUser - сохраняет данные пользователя
 - formErrors: FormErrors - поле для ошибок
 - events: IEvents - поле для сохранения класса events
 
 Методы класса:
 
-- setOrderItemsAndTotal(item: string[], total: number) - сохраняет общую сумму и карточки выбранные пользователем
 - setOrderField(field: keyof IUser, value: string): void - сохраняет данные пользователя
 - validityOrder() - валидирует данные пользователя
 
@@ -226,9 +225,7 @@ type IUserNumberAndEmail = Pick<IUser, 'number' | 'email'>
 Методы класса:
 
 - set id(value: string) - сеттер сохраняет id товара
-- get id(): string - геттер отдает id товара
 - set title(value: string) - сеттер сохраняет название товара
-- get title(): string - геттер отдает название товара
 - setPrice(price: number | null):string - метод переводит цену из числа в строку
 
 ### Класс ItemElement
@@ -331,7 +328,7 @@ Cеттеры класса:
 
 Сеттеры класса:
 
-- set buttonSelected(button: string):void - сеттер добавляет обводку к выбранной кнопке оплаты
+- set payment(button: string):void - сеттер добавляет обводку к выбранной кнопке оплаты
 - set address(value: string) - сеттер сохраняет значение поля `address`
 
 ### Класс FormContacts

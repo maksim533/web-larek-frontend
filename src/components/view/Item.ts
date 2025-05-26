@@ -33,17 +33,10 @@ export class Item extends Component<IItemView> {
 		this.container.dataset.id = value;
 	}
 
-	get id(): string {
-		return this.container.dataset.id || '';
-	}
-
 	set title(value: string) {
 		this.itemTitle.textContent = value;
 	}
 
-	get title(): string {
-		return this.itemTitle.textContent || '';
-	}
 }
 
 export class ItemElement extends Item {
@@ -118,5 +111,29 @@ export class ItemPreview extends ItemElement {
 
 	set description(value: string) {
 		this.itemDescription.textContent = value;
+	}
+}
+
+export class BasketItem extends Item {
+	protected _index: HTMLElement;
+	protected buttonDelete: HTMLButtonElement;
+
+	constructor(
+		protected container: HTMLElement,
+		protected events: IEvents,
+		action?: IAction
+	) {
+		super(container, events, action);
+		this._index = ensureElement('.basket__item-index', this.container);
+		this.buttonDelete = ensureElement(
+			'.basket__item-delete',
+			container
+		) as HTMLButtonElement;
+
+		this.buttonDelete.addEventListener('click', action?.onClick);
+	}
+
+	set index(value: string) {
+		this._index.textContent = value;
 	}
 }

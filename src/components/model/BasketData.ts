@@ -14,12 +14,8 @@ export class BasketData {
 		this.events.emit('basket:setAllItems');
 	}
 
-	getFullPrice(): number {
-		let sum: number = 0;
-		this.items.forEach((item) => {
-			sum = sum + item.price;
-		});
-		return sum;
+	getFullPrice() {
+		return this.items.reduce((a, b) =>  a + b.price, 0)
 	}
 
 	addItem(item: IItem): void {
