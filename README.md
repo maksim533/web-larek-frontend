@@ -46,6 +46,10 @@ yarn build
 
 ```
 
+## Деплой  
+
+<https://maksim533.github.io/web-larek-frontend/>
+
 ## Архитектура приложения
 
 Архитектура приложения реализована на Model-View-Presenter, которая обеспечивает разделение слоев на:
