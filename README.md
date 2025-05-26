@@ -126,7 +126,6 @@ type IUserNumberAndEmail = Pick<IUser, 'number' | 'email'>
 - handleResponse(response: Response): Promise<object> - обрабатывает ответ от сервера
 - get(uri: string) - получает ответ от сервера
 - post(uri: string, data: object, method: ApiPostMethods = 'POST') - отправляет запрос на сервер
-
 ### EventEmitter
 
 Класс EventEmitter который соответствует интерфейсу IEvents, отвечает за обработку событий.
