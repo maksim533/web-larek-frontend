@@ -138,12 +138,9 @@ events.on(
 	/^(order|contacts)\..*:change/,
 	(data: { field: keyof IUser; value: string }) => {
 		userData.setOrderField(data.field, data.value);
+
 	}
 );
-
-events.on('payment:change', () => {
-	formOrder.payment = userData.order.payment;
-});
 
 events.on('formErrors:change', (errors: Partial<IUser>) => {
 	const { payment, address, email, phone } = errors;
@@ -156,6 +153,10 @@ events.on('formErrors:change', (errors: Partial<IUser>) => {
 		.filter((i) => !!i)
 		.join('; ');
 });
+
+events.on('order:change', () => {
+	formOrder.payment = userData.order.payment
+})
 
 events.on('order:submit', () => {
 	modal.render({
@@ -179,8 +180,7 @@ events.on('contacts:submit', () => {
 			email: userData.order.email,
 		})
 		.then((res) => {
-			const successPage = success;
-			successPage.total = res.total;
+			success.total = res.total;
 			basketData.deleteAllItem();
 			userData.clearOrder();
 			modal.render({
@@ -198,6 +198,7 @@ events.on('popup:open', () => {
 
 events.on('popup:close', () => {
 	page.locked = false;
+	userData.clearOrder()
 });
 
 appApi

@@ -81,7 +81,6 @@ export class FormOrder extends Form<IOrderForm> {
 				const name = target.name as keyof IOrderForm;
 				const field = 'payment' as keyof IOrderForm;
 				this.onInputChange(field, name);
-				this.events.emit('payment:change');
 			});
 		});
 	}
