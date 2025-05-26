@@ -124,6 +124,7 @@ events.on('basket:changed', () => {
 });
 
 events.on('basket:continue', () => {
+	userData.clearOrder();
 	modal.render({
 		content: formOrder.render({
 			isValid: false,
@@ -138,7 +139,6 @@ events.on(
 	/^(order|contacts)\..*:change/,
 	(data: { field: keyof IUser; value: string }) => {
 		userData.setOrderField(data.field, data.value);
-
 	}
 );
 
@@ -155,8 +155,8 @@ events.on('formErrors:change', (errors: Partial<IUser>) => {
 });
 
 events.on('order:change', () => {
-	formOrder.payment = userData.order.payment
-})
+	formOrder.payment = userData.order.payment;
+});
 
 events.on('order:submit', () => {
 	modal.render({
@@ -198,7 +198,6 @@ events.on('popup:open', () => {
 
 events.on('popup:close', () => {
 	page.locked = false;
-	userData.clearOrder()
 });
 
 appApi

@@ -2,7 +2,6 @@ import { createElement, ensureElement } from '../../utils/utils';
 import { Component } from '../base/Components';
 import { IEvents } from '../base/events';
 
-
 export interface IBascet {
 	items: HTMLElement[];
 	fullPrice: number;

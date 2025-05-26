@@ -15,7 +15,7 @@ export class BasketData {
 	}
 
 	getFullPrice() {
-		return this.items.reduce((a, b) =>  a + b.price, 0)
+		return this.items.reduce((a, b) => a + b.price, 0);
 	}
 
 	addItem(item: IItem): void {

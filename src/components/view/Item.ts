@@ -36,7 +36,6 @@ export class Item extends Component<IItemView> {
 	set title(value: string) {
 		this.itemTitle.textContent = value;
 	}
-
 }
 
 export class ItemElement extends Item {

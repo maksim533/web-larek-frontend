@@ -16,18 +16,18 @@ export class UserData {
 		this.events = events;
 	}
 
-	clearOrder(){
+	clearOrder() {
 		this.order = {
 			address: '',
 			phone: '',
 			payment: null,
-			email: ''
-		}
+			email: '',
+		};
 	}
 
 	setOrderField(field: keyof IUser, value: string): void {
 		this.order[field] = value;
-		this.events.emit('order:change')
+		this.events.emit('order:change');
 		if (this.validityOrder()) {
 			this.events.emit('order:ready', this.order);
 		}
